@@ -85,7 +85,6 @@ fi
 if ! id -u pwrchute > /dev/null 2>&1 ; then
 	%{_sbindir}/useradd -u 68 -g 68 -d /dev/null -s /bin/false -c "PowerChute Plus" pwrchute
 fi
-%{_bindir}/update-db
 
 %post
 /sbin/chkconfig --add upsd
@@ -111,7 +110,6 @@ fi
 if [ "$1" = "0" ]; then
 	%{_sbindir}/userdel pwrchute
 	%{_sbindir}/groupdel pwrchute
-	%{_bindir}/update-db
 fi
 
 %clean
