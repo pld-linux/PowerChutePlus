@@ -3,7 +3,7 @@ Summary(pl):	Oprogramowanie do obs³ugi UPS-ów APC
 Name:		PowerChutePlus
 Version:	4.5.3
 Release:	1
-Copyright:	(c) 1999 APC, inc.
+License:	(c) 1999 APC, inc.
 Group:		Applications/System
 Group(de):	Applikationen/System
 Group(pl):	Aplikacje/System
