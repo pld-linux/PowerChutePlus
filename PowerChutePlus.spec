@@ -5,8 +5,6 @@ Version:	4.5.3
 Release:	1
 License:	(c) 1999 APC, inc.
 Group:		Applications/System
-Group(de):	Applikationen/System
-Group(pl):	Aplikacje/System
 Source0:	ftp://ftp.apcc.com/apc/public/software/unix/linux/pcplus/453/pcplus_453_caldera.tar
 Source1:	ftp://ftp.apcc.com/apc/public/software/unix/linux/pcplus/453/pc453ug.pdf
 Source2:	upsd.init
