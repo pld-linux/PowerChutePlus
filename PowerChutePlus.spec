@@ -1,4 +1,5 @@
 Summary:	UPS management software for APC UPS models
+Summary(pl):	Oprogramowanie do obs³ugi UPS-ów APC
 Name:		PowerChutePlus
 Version:	4.5.2.1
 Release:	2
@@ -26,6 +27,13 @@ configure and manage UPS models.
 Please note that /usr/lib/powerchute/Config.sh should be run in order
 to configure PowerChute plus.
 
+%description -l pl
+Ten program pozwala u¿ytkownikom bezpiecznie wy³±czyæ system w
+przypadku awarii zasilania. Pozwala tak¿e na skonfigurowanie UPS.
+
+Uwaga: aby skonfigurowaæ PowerChute Plus nale¿y uruchomiæ
+/usr/lib/powerchute/Config.sh .
+
 %prep
 %setup -q -c
 for i in BI_LINUX CI_LINUX COMMON FI_LINUX HELP ; do
@@ -34,13 +42,13 @@ done
 %patch0 -p1
 
 %build
-# No build, binaty package
+# No build, binary package
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sbindir},%{_libdir}/powerchute} \
 	$RPM_BUILD_ROOT/etc/rc.d/init.d \
-$RPM_BUILD_ROOT%{_prefix}/X11R6/{bin,lib/X11/{app-defaults,uid}}
+	$RPM_BUILD_ROOT%{_prefix}/X11R6/{bin,lib/X11/{app-defaults,uid}}
 
 install %{SOURCE1} .
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/upsd
@@ -49,7 +57,7 @@ install %{SOURCE4} $RPM_BUILD_ROOT%{_libdir}/powerchute/Config.sh
 install %{SOURCE6} $RPM_BUILD_ROOT%{_libdir}/powerchute/powerchute.ini_templ
 install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/powerchute.ini
 
-ln -s %{_sysconfdir}/powerchute.ini $RPM_BUILD_ROOT%{_libdir}/powerchute/
+ln -sf %{_sysconfdir}/powerchute.ini $RPM_BUILD_ROOT%{_libdir}/powerchute/
 
 install _upsd $RPM_BUILD_ROOT%{_sbindir}/upsd
 
@@ -75,8 +83,8 @@ install pwrchute.uid $RPM_BUILD_ROOT%{_prefix}/X11R6/lib/X11/uid/
 
 install pwrchute.ad $RPM_BUILD_ROOT%{_prefix}/X11R6/lib/X11/app-defaults/pwrchute
 
-ln -s /var/run/upsd.pid $RPM_BUILD_ROOT%{_libdir}/powerchute/
-ln -s /var/run/bkupsd.pid $RPM_BUILD_ROOT%{_libdir}/powerchute/
+ln -sf /var/run/upsd.pid $RPM_BUILD_ROOT%{_libdir}/powerchute/
+ln -sf /var/run/bkupsd.pid $RPM_BUILD_ROOT%{_libdir}/powerchute/
 
 gzip -9nf language.txt readme_apache
 
