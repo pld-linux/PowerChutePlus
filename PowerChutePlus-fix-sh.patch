@@ -1,0 +1,397 @@
+diff -ur PowerChutePlus-4.5.2.orig/addpage.sh PowerChutePlus-4.5.2/addpage.sh
+--- PowerChutePlus-4.5.2.orig/addpage.sh	Tue Oct  5 06:02:20 1999
++++ PowerChutePlus-4.5.2/addpage.sh	Sun Jul  2 01:33:38 2000
+@@ -27,7 +27,7 @@
+ cmd=$2
+ delay=$3
+ 
+-. ./what_os.sh
++. /usr/lib/powerchute/what_os.sh
+ 
+ case "$OS" in
+     $UWARE7)
+@@ -46,7 +46,7 @@
+     ;;
+ esac
+ 
+-. ./what_os.sh
++. /usr/lib/powerchute/what_os.sh
+ 
+ if [ "$OS" = "$LINUX" ]
+ then 
+@@ -54,7 +54,3 @@
+ else
+     echo "~!sleep $delay" >> $script
+ fi
+-
+-
+-
+-
+diff -ur PowerChutePlus-4.5.2.orig/dialpager.sh PowerChutePlus-4.5.2/dialpager.sh
+--- PowerChutePlus-4.5.2.orig/dialpager.sh	Tue Oct  5 06:02:20 1999
++++ PowerChutePlus-4.5.2/dialpager.sh	Sun Jul  2 01:33:38 2000
+@@ -16,11 +16,11 @@
+ #----------------------------------------------------------------------
+ 
+ 
+-PATH=/bin:/usr/bin:/sbin:/usr/sbin:/etc:/usr/ccs/bin
++PATH=/bin:/usr/bin:/sbin:/usr/sbin
+ export PATH
+ 
+ PWRCHUTE=GSUB_PWRCHUTE_ENV_HERE
+-TMPDIR=$PWRCHUTE/.tmp
++TMPDIR=/tmp
+ export TMPDIR
+ export PWRCHUTE
+ 
+@@ -69,11 +69,11 @@
+ }
+ 
+ 
+-modemlock=$TMPDIR/modemlock
++modemlock=$TMPDIR/upsd.modemlock
+ tmpcommand=$TMPDIR/$$.command
+ tmpfile=$TMPDIR/$$.page
+ 
+-. ./what_os.sh
++. /usr/lib/powerchute/what_os.sh
+ 
+ # if modemlock exists, then exit
+ if [ -r $modemlock ]
+@@ -133,11 +133,3 @@
+ then
+     rm -f $modemlock
+ fi
+-
+-
+-
+-
+-
+-
+-
+-
+diff -ur PowerChutePlus-4.5.2.orig/killbk.sh PowerChutePlus-4.5.2/killbk.sh
+--- PowerChutePlus-4.5.2.orig/killbk.sh	Tue Oct  5 06:02:20 1999
++++ PowerChutePlus-4.5.2/killbk.sh	Sun Jul  2 01:50:07 2000
+@@ -15,17 +15,13 @@
+ # more than that of awk
+ # -----------------------------------------------------------------------
+ 
+-    . ./what_os.sh
+-	if [ "$OS" = "LINUX" ]
+-	then
+-       ps ax | awk '/pwrchu/ {print $1}' > tmp.pid
+-    else
+-       ps -e | awk '/pwrchu/ {print $1}' > tmp.pid
+-    fi
++	TMPFILE="`mktemp /tmp/pcpc.pid.XXXXXX`"
++	. /usr/lib/powerchute/what_os.sh
++	ps ax | awk '/pwrchu/ && !/awk/ {print $1}' > $TMPFILE
+ 
+-	if [ -s tmp.pid ]   #Exists and file size greater than 0
++	if [ -s $TMPFILE ]   #Exists and file size greater than 0
+ 	then
+-		set `cat tmp.pid`
++		set `cat $TMPFILE`
+ 		while [ ! -z "$1" ]
+ 		do
+ 			echo "killing powerchute client with pid = $1"
+@@ -35,18 +31,17 @@
+ 		done
+ 	fi
+ 	
+-	rm -f tmp.pid
++	rm -f $TMPFILE
+ }
+ 
+ 
+ KillPCPClients
+ 
+ 
+-if [ -s bkupsd.pid ]
++if [ -s /var/run/bkupsd.pid ]
+ then
+-	set `cat bkupsd.pid`
++	set `cat /var/run/bkupsd.pid`
+ 	kill -INT $1
+-	rm -f bkupsd.pid
++	rm -f /var/run/bkupsd.pid
+ fi
+-
+ 
+diff -ur PowerChutePlus-4.5.2.orig/killpc.sh PowerChutePlus-4.5.2/killpc.sh
+--- PowerChutePlus-4.5.2.orig/killpc.sh	Tue Oct  5 06:02:20 1999
++++ PowerChutePlus-4.5.2/killpc.sh	Sun Jul  2 01:33:38 2000
+@@ -9,12 +9,12 @@
+ # Usage: ./killpc.sh
+ #
+ 
+-if [ -s upsd.pid ]
++if [ -s /var/run/upsd.pid ]
+ then
+-	set `cat upsd.pid`
++	set `cat /var/run/upsd.pid`
+ 	echo "Killing upsd instance running with pid $1"
+ 	kill $1
+-	rm -f upsd.pid
++	rm -f /var/run/upsd.pid
+ 	echo "Done."
+ else
+ 	echo "No instance of upsd detected to be running!"
+diff -ur PowerChutePlus-4.5.2.orig/mailer.sh PowerChutePlus-4.5.2/mailer.sh
+--- PowerChutePlus-4.5.2.orig/mailer.sh	Tue Oct  5 06:02:20 1999
++++ PowerChutePlus-4.5.2/mailer.sh	Sun Jul  2 01:33:38 2000
+@@ -24,11 +24,11 @@
+ #             a script parameter and also added PWRCHUTE env variable 
+ #
+ 
+-PATH=/bin:/usr/bin:/sbin:/usr/sbin:/etc:/usr/ccs/bin
++PATH=/bin:/usr/bin:/sbin:/usr/sbin
+ export PATH
+ 
+ PWRCHUTE=GSUB_PWRCHUTE_ENV_HERE
+-TMPDIR=$PWRCHUTE/.tmp
++TMPDIR=/tmp
+ export TMPDIR
+ export PWRCHUTE
+ 
+@@ -58,7 +58,4 @@
+ 	then
+    	rm -f $MSG
+ fi
+-
+-
+-
+ 
+diff -ur PowerChutePlus-4.5.2.orig/notifier.sh PowerChutePlus-4.5.2/notifier.sh
+--- PowerChutePlus-4.5.2.orig/notifier.sh	Tue Oct  5 06:02:20 1999
++++ PowerChutePlus-4.5.2/notifier.sh	Sun Jul  2 01:33:38 2000
+@@ -21,23 +21,12 @@
+ #
+ 
+ 
+-PATH=/bin:/usr/bin:/sbin:/usr/sbin:/etc:/usr/ccs/bin
++PATH=/bin:/usr/bin:/sbin:/usr/sbin
+ export PATH
+ 
+ USR_LIST=$1
+ MSG=$2
+ 
+-Echo() {
+-	string="$1"
+-	if [ -r /usr/5bin/echo ]
+-	then
+-		/usr/5bin/echo "$string"
+-	else
+-		echo "$string"
+-	fi
+-}
+-
+-
+ if [ -s $USR_LIST ]
+ then
+ 
+@@ -51,8 +40,3 @@
+ 
+ rm -f $USR_LIST
+ rm -f $MSG
+-
+-
+-
+-
+-
+diff -ur PowerChutePlus-4.5.2.orig/pcshut.sh PowerChutePlus-4.5.2/pcshut.sh
+--- PowerChutePlus-4.5.2.orig/pcshut.sh	Tue Oct  5 06:02:20 1999
++++ PowerChutePlus-4.5.2/pcshut.sh	Sun Jul  2 01:49:42 2000
+@@ -41,17 +41,13 @@
+ # more than that of awk
+ # -----------------------------------------------------------------------
+ 
+-    . ./what_os.sh
+-	if [ "$OS" = "LINUX" ]
+-	then
+-       ps ax | awk '/pwrchu/ {print $1}' > tmp.pid
+-    else
+-       ps -e | awk '/pwrchu/ {print $1}' > tmp.pid
+-    fi
++	TMPFILE="`mktemp /tmp/pcpc.pid.XXXXXX`"
++	. /usr/lib/powerchute/what_os.sh
++	ps ax | awk '/pwrchu/ && !/awk/ {print $1}' > $TMPFILE
+ 
+-	if [ -s tmp.pid ]   #Exists and file size greater than 0
++	if [ -s $TMPFILE ]   #Exists and file size greater than 0
+ 	then
+-		set `cat tmp.pid`
++		set `cat $TMPFILE`
+ 		while [ ! -z "$1" ]
+ 		do
+ 			echo "killing powerchute client with pid = $1"
+@@ -61,13 +57,13 @@
+ 		done
+ 	fi
+ 	
+-	rm -f tmp.pid
++	rm -f $TMPFILE
+ }
+ 
+ 
+ KillPCPClients
+ 
+-. ./what_os.sh
++. /usr/lib/powerchute/what_os.sh
+ 
+ if [ $SHUTDOWN_TYPE = "QUICK" ]
+ then
+@@ -123,10 +119,4 @@
+ 			;;
+ 	esac
+ fi
+-
+-
+-
+-
+-
+-
+ 
+diff -ur PowerChutePlus-4.5.2.orig/wall.sh PowerChutePlus-4.5.2/wall.sh
+--- PowerChutePlus-4.5.2.orig/wall.sh	Tue Oct  5 06:02:20 1999
++++ PowerChutePlus-4.5.2/wall.sh	Sun Jul  2 01:33:38 2000
+@@ -25,7 +25,7 @@
+ # djs18Oct95: UnixWare cannot write to /dev/pts000
+ #
+ 
+-PATH=/bin:/usr/bin:/sbin:/usr/sbin:/etc:/usr/ccs/bin
++PATH=/bin:/usr/bin:/sbin:/usr/sbin
+ export PATH
+ 
+ MSG=$1
+@@ -50,7 +50,7 @@
+ if [ -r $MSG ]
+ then
+ 
+-	. ./what_os.sh
++	. /usr/lib/powerchute/what_os.sh
+ 
+ 	case "$OS" in
+ 		$UWARE1)
+@@ -65,17 +65,4 @@
+ 
+ 	rm -f $MSG
+ fi
+-	
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+ 
+diff -ur PowerChutePlus-4.5.2.orig/what_os.sh PowerChutePlus-4.5.2/what_os.sh
+--- PowerChutePlus-4.5.2.orig/what_os.sh	Tue Oct  5 06:02:20 1999
++++ PowerChutePlus-4.5.2/what_os.sh	Sun Jul  2 01:33:38 2000
+@@ -57,65 +57,65 @@
+ OS="OS_UNKNOWN"
+ 
+ 
+-PATH=/bin:/usr/bin:/sbin:/usr/sbin:/etc:/usr/ccs/bin
++PATH=/bin:/usr/bin:/sbin:/usr/sbin
+ export PATH
+ 
+-if [ ! -r machine_def ]
++if [ ! -r /usr/lib/powerchute/machine_def ]
+ then
+ 	echo "Improper installation, or corrupted product tree: No machine_def file"
+ 	exit
+ fi
+ 
+-if [ -r SOLARIS2X ]
++if [ -r /usr/lib/powerchute/SOLARIS2X ]
+ then
+ 	OS=$SOLARIS2X
+-elif [ -r SOLARIS2X86 ]
++elif [ -r /usr/lib/powerchute/SOLARIS2X86 ]
+ then
+ 	OS=$SOLARIS2X86
+-elif [ -r AIX3 ] 
++elif [ -r /usr/lib/powerchute/AIX3 ] 
+ then
+ 	OS=$AIX3
+-#elif [ -r AIX324- ] || [ -r AIX324+ ]
+-elif [ -r AIX4 ] 
++#elif [ -r /usr/lib/powerchute/AIX324- ] || [ -r /usr/lib/powerchute/AIX324+ ]
++elif [ -r /usr/lib/powerchute/AIX4 ] 
+ then
+ 	OS=$AIX4
+-elif [ -r HPUX9 ]
++elif [ -r /usr/lib/powerchute/HPUX9 ]
+ then
+ 	OS=$HPUX9
+-elif [ -r HPUX10 ]
++elif [ -r /usr/lib/powerchute/HPUX10 ]
+ then
+ 	OS=$HPUX10
+-elif [ -r SUNOS4 ]
++elif [ -r /usr/lib/powerchute/SUNOS4 ]
+ then
+ 	OS=$SUNOS4
+-elif [ -r UWARE1 ]
++elif [ -r /usr/lib/powerchute/UWARE1 ]
+ then
+         OS=$UWARE1
+-elif [ -r UWARE2 ]
++elif [ -r /usr/lib/powerchute/UWARE2 ]
+ then
+         OS=$UWARE2
+-elif [ -r NCR ]
++elif [ -r /usr/lib/powerchute/NCR ]
+ then
+         OS=$NCR
+-elif [ -r SCO ]
++elif [ -r /usr/lib/powerchute/SCO ]
+ then
+         OS=$SCO
+-elif [ -r SGI ]
++elif [ -r /usr/lib/powerchute/SGI ]
+ then
+ 	OS=$SGI
+-elif [ -r OLIVETTI ]
++elif [ -r /usr/lib/powerchute/OLIVETTI ]
+ then
+ 	OS=$OLIV
+-elif [ -r UNISYS ]
++elif [ -r /usr/lib/powerchute/UNISYS ]
+ then
+ 	OS=$USYS
+-elif [ -r ALPHAOSF ]
++elif [ -r /usr/lib/powerchute/ALPHAOSF ]
+ then
+         OS=$ALPHAOSF
+-elif [ -r UWARE7 ]
++elif [ -r /usr/lib/powerchute/UWARE7 ]
+ then
+ 	OS=$UWARE7
+-elif [ -r LINUX ]
++elif [ -r /usr/lib/powerchute/LINUX ]
+ then
+ 	OS=$LINUX
+ else
+@@ -129,12 +129,7 @@
+ case $1 in
+ SHOWME | showme)
+ 	echo $OS
+-	cat machine_def
++	cat /usr/lib/powerchute/machine_def
+ 	;;
+ esac
+-
+-
+-
+-
+-
+ 

@@ -1,0 +1,238 @@
+[ Ups ]
+ SignallingType = GSUB_SIGTYPE_HERE
+ PortName = GSUB_TTY_HERE
+ AutoUpsRebootEnabled = Yes
+ AllowedPortNames = GSUB_ALLOWED_PORTS_HERE
+ CableType = GSUB_CABLE_TYPE_HERE
+ GSUB_TIMEOUT_HERE
+
+[ EventLogging ]
+ EventLogEnabled = Yes
+ EventLogName = /var/log/powerchute.log
+ EventLogMaxSize = 50000
+
+
+[ DataLogging ]
+ DataLogEnabled = Yes
+ DataLogName = /var/log/powerchute.dat
+ DataLogMaxSize = 50000
+ DataLogInterval = 600
+
+[ ErrorLogging ]
+ ErrorLogEnabled = Yes
+ ErrorLogName = /var/log/powerchute.err
+ ErrorLogMaxSize = 50000
+
+
+[ Messaging ]
+ MessageDelay = 5
+ MessageInterval = 30
+
+
+[ SelfTests ]
+ EnableSelfTests = Yes
+ SelfTestDay = MONDAY
+ SelfTestSchedule = At turn on
+ SelfTestTime = 12:00 PM
+ 
+
+[ Shutdown ]
+ ShutdownDelay = 30
+ AdminShutdownDelay = 900
+ DailyShutdownEnabled = No
+ DailyShutdownTime = 6:00 PM
+ DailyWakeupTime = 7:00 AM
+ WeeklyShutdownEnabled = No
+ WeeklyShutdownDay = Friday
+ WeeklyShutdownTime = 6:00 PM
+ WeeklyWakeUpDay = Monday
+ WeeklyWakeUpTime = 7:00 AM
+
+[ Server ]
+ HostName =
+
+[ UserInterface ]
+ TemperatureUnits = Celsius
+ SoundEffects = No
+ GSUB_UI_WARNCOLOR_HERE
+ GSUB_UI_ERRCOLOR_HERE
+
+[ BatteryCalibration ]
+ Enabled = No
+ BatteryCalibrationDay = Monday
+ BatteryCalibrationTime = 07:00 AM
+
+[ Devices ]
+ MeasureUps = GSUB_MUPS_HERE
+
+[ EventText ]
+ 100000 = *** PowerChute PLUS Version 4.5.2 (glibc) Started ***
+ 100100 = *** PowerChute PLUS Stopped ***
+ 100200 = Communication established
+ 100300 = Normal power restored: UPS on line
+ 100400 = UPS self-test passed
+ 100401 = Scheduled UPS self-test passed
+ 100402 = User initiated UPS self-test passed
+ 100403 = Self-test at UPS passed
+ 100500 = Administrative shutdown started
+ 100501 = Administrative shutdown: User initiated
+ 100502 = Administrative shutdown: Weekly shutdown
+ 100503 = Administrative shutdown: Daily shutdown
+ 100600 = Shutdown cancelled
+ 100601 = User initiated shutdown cancelled
+ 100602 = Weekly administrative shutdown cancelled
+ 100603 = Daily administrative shutdown cancelled
+ 100700 = UPS returned from low battery condition
+ 100701 = UPS returned from low battery condition: #BATTERY_CAPACITY#%
+ 100900 = UPS batteries no longer need replacing
+ 101000 = Contact #CONTACT_NUMBER# normal (#NORMAL_POSITION#): #USER_COMMENT#
+ 101300 = UPS overload condition solved
+ 101400 = UPS run time calibration initiated
+ 101500 = UPS run time calibration completed
+ 101600 = Shutdown started
+ 101601 = User initiated shutdown started
+ 101602 = Weekly administrative shutdown started
+ 101603 = Daily administrative shutdown started
+ 101700 = UPS returned from bypass
+ 101800 = Smart Cell Signal Restored
+ 110000 = Ambient temperature back within thresholds
+ 110100 = Ambient humidity back within thresholds
+
+
+ 200000 = UPS on battery
+ 200001 = UPS on battery: High input line voltage #MAX_VOLTAGE# V
+ 200002 = UPS on battery: Brownout #MIN_VOLTAGE# V
+ 200003 = UPS on battery: Blackout #MIN_VOLTAGE# V
+ 200004 = UPS on battery: Small momentary sag #MIN_VOLTAGE# V
+ 200006 = UPS on battery: Deep momentary sag #MIN_VOLTAGE# V
+ 200005 = UPS on battery: Small momentary spike #MAX_VOLTAGE# V
+ 200007 = UPS on battery: Large momentary spike #MAX_VOLTAGE# V
+ 200008 = UPS on battery: Simulated power failure
+ 200100 = System shutdown
+ 200200 = UPS enabling SmartBoost
+ 200300 = Low battery condition
+ 200301 = Low battery condition: #BATTERY_CAPACITY#%
+ 200400 = UPS run time calibration cancelled
+ 200401 = UPS run time calibration cancelled by user
+ 200402 = UPS run time calibration cancelled by power failure
+ 200403 = UPS unable to perform run time calibration: Capacity < 100%
+ 201301 = UPS on bypass: user set via software or panel
+ 201302 = GSUB_CHANGE13_HERE
+
+
+ 300000 = Unable to communicate with UPS
+ 300100 = UPS output overload
+ 300200 = UPS self-test failed
+ 300201 = Scheduled UPS self-test failed: GSUB_CHANGE1_HERE
+ 300202 = Scheduled UPS self-test failed: Invalid test
+ 300203 = User initiated self-test failed: GSUB_CHANGE1_HERE
+ 300204 = User initiated self-test failed: Invalid test
+ 300205 = Self-test at UPS failed: GSUB_CHANGE1_HERE
+ 300206 = Self-test at UPS failed: Invalid test
+ 300300 = UPS battery is discharged
+ 300301 = UPS battery is discharged: #BATTERY_CAPACITY#%
+ 300400 = Communication lost while on battery
+ 300600 = Contact #CONTACT_NUMBER# fault (#CONTACT_POSITION#): #USER_COMMENT#
+ 301000 = Check installation of Smart Cell signal cable
+ 301300 = GSUB_CHANGE2_HERE internal temp over limit
+ 301301 = GSUB_CHANGE2_HERE battery charger failure
+ 301302 = UPS on bypass: severe DC imbalance overload
+ 301303 = UPS on bypass: output voltage outside limits
+ 301304 = UPS on bypass: top module fan needs repair
+ 301400 = Base module fan needs repair
+ 301500 = Base module bypass power supply needs repair
+ 301600 = UPS battery needs replacing
+
+ 310001 = Below lower ambient temperature threshold of #LOW_THRESHOLD#
+ 310002 = Exceeded upper ambient temperature threshold of #HIGH_THRESHOLD#
+ 310101 = Below humidity threshold of #LOW_THRESHOLD#
+ 310102 = Exceeded upper humidity threshold of #HIGH_THRESHOLD#
+
+
+[ PopupText ]
+ 1003 = Normal utility power at #HOSTNAME# has been restored.
+ 1006 = Shutdown of #HOSTNAME# has been cancelled.
+ 1007 = UPS batteries at #HOSTNAME# are no longer discharged.
+ 1016 = Shutdown process started.
+
+ 2000 = #HOSTNAME# is running on battery power.
+ 2001 = #HOSTNAME# has been shutdown.
+ 2003 = Low battery power at #HOSTNAME#.
+
+ 3000 = #HOSTNAME# has lost communications with the UPS.
+ 3003 = UPS batteries at #HOSTNAME# are discharged.
+
+
+
+[ FlexEventNames ]
+ 1000 = PowerChute Started
+ 1001 = PowerChute Stopped
+ 1002 = Communication Established
+ 1003 = Power Restored
+ 1004 = UPS Self-Test Passed
+ 1005 = Administrative Shutdown
+ 1006 = Shutdown Cancelled
+ 1007 = UPS Return From Low Battery
+ 1009 = Battery No Longer Needs Replacing
+ 1010 = Contact Normal
+ 1013 = UPS Overload Condition Solved
+ 1014 = UPS Run Time Calibration Initiated
+ 1015 = UPS Run Time Calibration Completed
+ 1016 = System Shutdown Starting
+ 1017 = Return From Bypass
+ 1018 = Smart Cell Signal Returned
+
+ 1100 = Ambient Temp In Range
+ 1101 = Humidity In Range
+
+ 2000 = UPS On Battery
+ 2001 = System Shutdown Complete
+ 2002 = UPS Enabling SmartBoost
+ 2003 = Low Battery Condition
+ 2004 = Cancel Battery Calibration
+ 2013 = UPS On Bypass: Maintenance
+
+
+ 3000 = Unable To Communicate With UPS
+ 3001 = UPS Output Overload
+ 3002 = UPS Self-Test Failed
+ 3003 = UPS Battery Is Discharged
+ 3004 = Comm Lost While On Battery
+ 3006 = Abnormal Contact Position
+ 3010 = Check Smart Cell Signal
+ 3013 = UPS On Bypass: Failure
+ 3014 = Base Module Fan Failure
+ 3015 = Base Module Power Supply Failure
+ 3016 = UPS Battery Needs Replacing
+
+ 3100 = Ambient Temp Out Of Range
+ 3101 = Humidity Out Of Range
+
+
+[ Email ]
+ Password = APC
+
+[ LineFail ]
+ NotifyDelay = 5
+ NotifyInterval = 30
+ NotifyRepeat = Yes
+ ShutdownDelay = 300
+ GSUB_ACTIONS_HERE
+
+[ AdminShutdown ]
+ ShutdownDelay = 900
+ NotifyRepeat = Yes
+
+[ Network ]
+ UseTCP = GSUB_USETCP_HERE
+
+[ Security ]
+ RunCommandFilesAsRoot = GSUB_COMMAND_FILES_AS_ROOT_HERE
+ SendEmailAsRoot = GSUB_SEND_EMAIL_AS_ROOT_HERE
+
+[ Help ]
+ WebBrowser = /usr/X11R6/bin/netscape
+ 
+[ Modem ]  
+ PortName = GSUB_MODEM_PORT_NAME
+ ModemAllowedPortNames = GSUB_MODEM_ALLOWED_PORT_NAMES
