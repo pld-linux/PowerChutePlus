@@ -130,7 +130,7 @@ fi
 %defattr(644,root,root,755)
 %doc help/* apachesh.pdf language.txt.gz readme_apache.gz pc453ug.pdf settings.pdf
 %attr(754,root,root) /etc/rc.d/init.d/upsd
-%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/powerchute.ini
+%attr(640,root,pwrchute) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/powerchute.ini
 %attr(755,root,root) %{_sbindir}/upsd
 %attr(755,root,root) %{_libdir}/powerchute/Config.sh
 %attr(755,root,root) %{_libdir}/powerchute/_xpwrchute
