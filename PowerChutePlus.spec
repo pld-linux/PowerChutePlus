@@ -18,14 +18,13 @@ Source7:	ftp://ftp.apcc.com/apc/public/software/unix/linux/pcplus/settings.pdf
 # Source7-md5:	c69abad141a836fd12ced0cc39049dc6
 Patch0:		%{name}-fix-sh.patch
 PreReq:		rc-scripts
-Requires(pre):	/usr/bin/getgid
 Requires(pre):	/bin/id
-Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/useradd
+Requires(pre):	/usr/sbin/groupadd
 Requires(post,preun):	/sbin/chkconfig
-Requires(postun):	/usr/sbin/userdel
 Requires(postun):	/usr/sbin/groupdel
-ExclusiveOS:	linux
+Requires(postun):	/usr/sbin/userdel
 ExclusiveArch:	%{ix86}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
