@@ -153,6 +153,7 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/upsd
 %attr(640,root,pwrchute) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/powerchute.ini
 %attr(755,root,root) %{_sbindir}/upsd
+%dir %{_libdir}/powerchute
 %attr(755,root,root) %{_libdir}/powerchute/Config.sh
 %attr(755,root,root) %{_libdir}/powerchute/_xpwrchute
 %attr(755,root,root) %{_libdir}/powerchute/addpage.sh
