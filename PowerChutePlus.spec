@@ -17,6 +17,7 @@ Source6:	%{name}-powerchute.ini_templ
 Source7:	ftp://ftp.apcc.com/apc/public/software/unix/linux/pcplus/settings.pdf
 # Source7-md5:	c69abad141a836fd12ced0cc39049dc6
 Patch0:		%{name}-fix-sh.patch
+BuildRequires:	rpmbuild(macros) >= 1.159
 PreReq:		rc-scripts
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
@@ -25,6 +26,8 @@ Requires(pre):	/usr/sbin/groupadd
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
+Provides:	group(pwrchute)
+Provides:	user(pwrchute)
 ExclusiveArch:	%{ix86}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -100,21 +103,22 @@ ln -sf /var/run/bkupsd.pid $RPM_BUILD_ROOT%{_libdir}/powerchute
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ -n "`getgid pwrchute`" ]; then
-	if [ "`getgid pwrchute`" != "68" ]; then
+if [ -n "`/usr/bin/getgid pwrchute`" ]; then
+	if [ "`/usr/bin/getgid pwrchute`" != 68 ]; then
 		echo "Error: group pwrchute doesn't have gid=68. Correct this before installing PowerChutePlus." 1>&2
 		exit 1
 	fi
 else
-	/usr/sbin/groupadd -g 68 pwrchute
+	/usr/sbin/groupadd -g 68 pwrchute 1>&2
 fi
-if [ -n "`id -u pwrchute 2>/dev/null`" ]; then
-	if [ "`id -u pwrchute`" != "68" ]; then
+if [ -n "`/bin/id -u pwrchute 2>/dev/null`" ]; then
+	if [ "`/bin/id -u pwrchute`" != 68 ]; then
 		echo "Error: user pwrchute doesn't have uid=68. Correct this before installing PowerChutePlus." 1>&2
 		exit 1
 	fi
 else
-	/usr/sbin/useradd -u 68 -g 68 -d /dev/null -s /bin/false -c "PowerChute Plus" pwrchute
+	/usr/sbin/useradd -u 68 -g 68 -d /usr/share/empty -s /bin/false \
+		-c "PowerChute Plus" pwrchute
 fi
 
 %post
@@ -139,8 +143,8 @@ fi
 
 %postun
 if [ "$1" = "0" ]; then
-	/usr/sbin/userdel pwrchute
-	/usr/sbin/groupdel pwrchute
+	%userremove pwrchute
+	%groupremove pwrchute
 fi
 
 %files
