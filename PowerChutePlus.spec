@@ -1,19 +1,20 @@
 Summary:	UPS management software for APC UPS models
 Summary(pl):	Oprogramowanie do obs³ugi UPS-ów APC
 Name:		PowerChutePlus
-Version:	4.5.2.1
-Release:	2
+Version:	4.5.3
+Release:	1
 Copyright:	(c) 1999 APC, inc.
 Group:		Applications/System
 Group(de):	Applikationen/System
 Group(pl):	Aplikacje/System
-Source0:	ftp://ftp.apcc.com/apc/public/software/unix/linux/pcplus/4521/pc4521_glibc.tar
-Source1:	ftp://ftp.apcc.com/apc/public/software/unix/linux/pcplus/4521/pclinxug.pdf
+Source0:	ftp://ftp.apcc.com/apc/public/software/unix/linux/pcplus/453/pcplus_453_caldera.tar
+Source1:	ftp://ftp.apcc.com/apc/public/software/unix/linux/pcplus/453/pc453ug.pdf
 Source2:	upsd.init
 Source3:	%{name}-xpowerchute.sh
 Source4:	%{name}-Config.sh
 Source5:	%{name}-powerchute.ini
 Source6:	%{name}-powerchute.ini_templ
+Source7:	ftp://ftp.apcc.com/apc/public/software/unix/linux/pcplus/settings.pdf
 Patch0:		%{name}-fix-sh.patch
 ExclusiveOS:	linux
 ExclusiveArch:	%{ix86}
@@ -52,6 +53,7 @@ install -d $RPM_BUILD_ROOT{%{_sbindir},%{_libdir}/powerchute} \
 	$RPM_BUILD_ROOT%{_prefix}/X11R6/{bin,lib/X11/{app-defaults,uid}}
 
 install %{SOURCE1} .
+install %{SOURCE7} .
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/upsd
 install %{SOURCE3} $RPM_BUILD_ROOT%{_prefix}/X11R6/bin/xpowerchute
 install %{SOURCE4} $RPM_BUILD_ROOT%{_libdir}/powerchute/Config.sh
@@ -128,7 +130,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc help/* apachesh.pdf language.txt.gz readme_apache.gz pclinxug.pdf
+%doc help/* apachesh.pdf language.txt.gz readme_apache.gz pc453ug.pdf settings.pdf
 %attr(754,root,root) /etc/rc.d/init.d/upsd
 %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/powerchute.ini
 %attr(755,root,root) %{_sbindir}/upsd
