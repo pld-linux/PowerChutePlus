@@ -81,38 +81,23 @@ ln -s /var/run/bkupsd.pid $RPM_BUILD_ROOT%{_libdir}/powerchute/
 gzip -9nf language.txt readme_apache
 
 %pre
-if ! id -g pwrchute > /dev/null 2>&1 ; then
-	%{_sbindir}/groupadd -g 68 pwrchute
-fi
-if ! id -u pwrchute > /dev/null 2>&1 ; then
-	%{_sbindir}/useradd -u 68 -g 68 -d /dev/null -s /bin/false -c "PowerChute Plus" pwrchute
-fi
+GROUP=pwrchute; GID=68; %groupadd
+USER=pwrchute; UID=68; HOMEDIR=/dev/null; COMMENT="PowerChute Plus"
+%useradd
 
 %post
-/sbin/chkconfig --add upsd
-if [ -f /var/lock/subsys/upsd ]; then
-	/etc/rc.d/init.d/upsd restart 1>&2
-else
-	echo "Type \"/etc/rc.d/init.d/upsd start\" to start UPSd server" 1>&2
-fi
+NAME=upsd; DESC="UPSd server"; %chkconfig_post
 cd %{_libdir}/powerchute
 ./machine_id
 echo "You should run %{_libdir}/powerchute/Config.sh to configure PowerChute plus"
 echo "Remember to set the password for pwrchute account"
 	
 %preun
-if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/upsd ]; then
-		/etc/rc.d/init.d/upsd stop 1>&2
-	fi
-	/sbin/chkconfig --del upsd
-fi
+NAME=upsd; %chkconfig_preun
 
 %postun
-if [ "$1" = "0" ]; then
-	%{_sbindir}/userdel pwrchute
-	%{_sbindir}/groupdel pwrchute
-fi
+USER=pwrchute; %userdel
+GROUP=pwrchute; %groupdel
 
 %clean
 rm -rf $RPM_BUILD_ROOT
