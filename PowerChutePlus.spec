@@ -17,6 +17,7 @@ Source6:	%{name}-powerchute.ini_templ
 Patch0:		%{name}-fix-sh.patch
 ExclusiveOS:	linux
 ExclusiveArch:	%{ix86}
+Prereq:		chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -88,6 +89,9 @@ ln -sf /var/run/bkupsd.pid $RPM_BUILD_ROOT%{_libdir}/powerchute/
 
 gzip -9nf language.txt readme_apache
 
+%clean
+rm -rf $RPM_BUILD_ROOT
+
 %pre
 if ! id -g pwrchute > /dev/null 2>&1 ; then
 	%{_sbindir}/groupadd -g 68 pwrchute
@@ -121,9 +125,6 @@ if [ "$1" = "0" ]; then
 	%{_sbindir}/userdel pwrchute
 	%{_sbindir}/groupdel pwrchute
 fi
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
