@@ -17,9 +17,16 @@ Source6:	%{name}-powerchute.ini_templ
 Source7:	ftp://ftp.apcc.com/apc/public/software/unix/linux/pcplus/settings.pdf
 # Source7-md5:	c69abad141a836fd12ced0cc39049dc6
 Patch0:		%{name}-fix-sh.patch
+PreReq:		rc-scripts
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/bin/id
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
+Requires(post,preun):	/sbin/chkconfig
+Requires(postun):	/usr/sbin/userdel
+Requires(postun):	/usr/sbin/groupdel
 ExclusiveOS:	linux
 ExclusiveArch:	%{ix86}
-Prereq:		chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -61,7 +68,7 @@ install %{SOURCE4} $RPM_BUILD_ROOT%{_libdir}/powerchute/Config.sh
 install %{SOURCE6} $RPM_BUILD_ROOT%{_libdir}/powerchute/powerchute.ini_templ
 install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/powerchute.ini
 
-ln -sf %{_sysconfdir}/powerchute.ini $RPM_BUILD_ROOT%{_libdir}/powerchute/
+ln -sf %{_sysconfdir}/powerchute.ini $RPM_BUILD_ROOT%{_libdir}/powerchute
 
 install _upsd $RPM_BUILD_ROOT%{_sbindir}/upsd
 
@@ -83,24 +90,32 @@ install upsoff $RPM_BUILD_ROOT%{_libdir}/powerchute
 install upswrite $RPM_BUILD_ROOT%{_libdir}/powerchute
 install wall.sh $RPM_BUILD_ROOT%{_libdir}/powerchute
 install what_os.sh $RPM_BUILD_ROOT%{_libdir}/powerchute
-install pwrchute.uid $RPM_BUILD_ROOT%{_prefix}/X11R6/lib/X11/uid/
+install pwrchute.uid $RPM_BUILD_ROOT%{_prefix}/X11R6/lib/X11/uid
 
 install pwrchute.ad $RPM_BUILD_ROOT%{_prefix}/X11R6/lib/X11/app-defaults/pwrchute
 
-ln -sf /var/run/upsd.pid $RPM_BUILD_ROOT%{_libdir}/powerchute/
-ln -sf /var/run/bkupsd.pid $RPM_BUILD_ROOT%{_libdir}/powerchute/
-
-gzip -9nf language.txt readme_apache
+ln -sf /var/run/upsd.pid $RPM_BUILD_ROOT%{_libdir}/powerchute
+ln -sf /var/run/bkupsd.pid $RPM_BUILD_ROOT%{_libdir}/powerchute
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if ! id -g pwrchute > /dev/null 2>&1 ; then
-	%{_sbindir}/groupadd -g 68 pwrchute
+if [ -n "`getgid pwrchute`" ]; then
+	if [ "`getgid pwrchute`" != "68" ]; then
+		echo "Error: group pwrchute doesn't have gid=68. Correct this before installing PowerChutePlus." 1>&2
+		exit 1
+	fi
+else
+	/usr/sbin/groupadd -g 68 pwrchute
 fi
-if ! id -u pwrchute > /dev/null 2>&1 ; then
-	%{_sbindir}/useradd -u 68 -g 68 -d /dev/null -s /bin/false -c "PowerChute Plus" pwrchute
+if [ -n "`id -u pwrchute 2>/dev/null`" ]; then
+	if [ "`id -u pwrchute`" != "68" ]; then
+		echo "Error: user pwrchute doesn't have uid=68. Correct this before installing PowerChutePlus." 1>&2
+		exit 1
+	fi
+else
+	/usr/sbin/useradd -u 68 -g 68 -d /dev/null -s /bin/false -c "PowerChute Plus" pwrchute
 fi
 
 %post
@@ -125,13 +140,13 @@ fi
 
 %postun
 if [ "$1" = "0" ]; then
-	%{_sbindir}/userdel pwrchute
-	%{_sbindir}/groupdel pwrchute
+	/usr/sbin/userdel pwrchute
+	/usr/sbin/groupdel pwrchute
 fi
 
 %files
 %defattr(644,root,root,755)
-%doc help/* apachesh.pdf language.txt.gz readme_apache.gz pc453ug.pdf settings.pdf
+%doc help/* apachesh.pdf language.txt readme_apache pc453ug.pdf settings.pdf
 %attr(754,root,root) /etc/rc.d/init.d/upsd
 %attr(640,root,pwrchute) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/powerchute.ini
 %attr(755,root,root) %{_sbindir}/upsd
