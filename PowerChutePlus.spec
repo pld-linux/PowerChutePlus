@@ -128,7 +128,7 @@ cd %{_libdir}/powerchute
 ./machine_id
 echo "You should run %{_libdir}/powerchute/Config.sh to configure PowerChute plus"
 echo "Remember to set the password for pwrchute account"
-	
+
 %preun
 if [ "$1" = "0" ]; then
 	if [ -f /var/lock/subsys/upsd ]; then
