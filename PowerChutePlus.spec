@@ -86,14 +86,14 @@ USER=pwrchute; UID=68; HOMEDIR=/dev/null; COMMENT="PowerChute Plus"
 %useradd
 
 %post
-NAME=upsd; DESC="UPSd server"; %chkconfig_post
+NAME=upsd; DESC="UPSd server"; %chkconfig_add
 cd %{_libdir}/powerchute
 ./machine_id
 echo "You should run %{_libdir}/powerchute/Config.sh to configure PowerChute plus"
 echo "Remember to set the password for pwrchute account"
 	
 %preun
-NAME=upsd; %chkconfig_preun
+NAME=upsd; %chkconfig_del
 
 %postun
 USER=pwrchute; %userdel
