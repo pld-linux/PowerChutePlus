@@ -6,13 +6,16 @@ Release:	1
 License:	(c) 1999 APC, inc.
 Group:		Applications/System
 Source0:	ftp://ftp.apcc.com/apc/public/software/unix/linux/pcplus/453/pcplus_453_caldera.tar
+# Source0-md5:	5eb99efd5561694b9f692aa713bd974d
 Source1:	ftp://ftp.apcc.com/apc/public/software/unix/linux/pcplus/453/pc453ug.pdf
+# Source1-md5:	0c2a621adcad8fdcb6064ed3cb042711
 Source2:	upsd.init
 Source3:	%{name}-xpowerchute.sh
 Source4:	%{name}-Config.sh
 Source5:	%{name}-powerchute.ini
 Source6:	%{name}-powerchute.ini_templ
 Source7:	ftp://ftp.apcc.com/apc/public/software/unix/linux/pcplus/settings.pdf
+# Source7-md5:	c69abad141a836fd12ced0cc39049dc6
 Patch0:		%{name}-fix-sh.patch
 ExclusiveOS:	linux
 ExclusiveArch:	%{ix86}
