@@ -17,7 +17,7 @@ Source6:	%{name}-powerchute.ini_templ
 Source7:	ftp://ftp.apcc.com/apc/public/software/unix/linux/pcplus/settings.pdf
 # Source7-md5:	c69abad141a836fd12ced0cc39049dc6
 Patch0:		%{name}-fix-sh.patch
-BuildRequires:	rpmbuild(macros) >= 1.159
+BuildRequires:	rpmbuild(macros) >= 1.202
 PreReq:		rc-scripts
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
@@ -103,23 +103,8 @@ ln -sf /var/run/bkupsd.pid $RPM_BUILD_ROOT%{_libdir}/powerchute
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ -n "`/usr/bin/getgid pwrchute`" ]; then
-	if [ "`/usr/bin/getgid pwrchute`" != 68 ]; then
-		echo "Error: group pwrchute doesn't have gid=68. Correct this before installing PowerChutePlus." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/groupadd -g 68 pwrchute 1>&2
-fi
-if [ -n "`/bin/id -u pwrchute 2>/dev/null`" ]; then
-	if [ "`/bin/id -u pwrchute`" != 68 ]; then
-		echo "Error: user pwrchute doesn't have uid=68. Correct this before installing PowerChutePlus." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/useradd -u 68 -g 68 -d /usr/share/empty -s /bin/false \
-		-c "PowerChute Plus" pwrchute
-fi
+%groupadd -g 68 pwrchute
+%useradd -u 68 -g 68 -d /usr/share/empty -s /bin/false -c "PowerChute Plus" pwrchute
 
 %post
 /sbin/chkconfig --add upsd
