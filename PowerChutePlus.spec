@@ -136,7 +136,7 @@ fi
 %defattr(644,root,root,755)
 %doc help/* apachesh.pdf language.txt readme_apache pc453ug.pdf settings.pdf
 %attr(754,root,root) /etc/rc.d/init.d/upsd
-%attr(640,root,pwrchute) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/powerchute.ini
+%attr(640,root,pwrchute) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/powerchute.ini
 %attr(755,root,root) %{_sbindir}/upsd
 %dir %{_libdir}/powerchute
 %attr(755,root,root) %{_libdir}/powerchute/Config.sh
@@ -163,5 +163,5 @@ fi
 %attr(755,root,root) %{_prefix}/X11R6/bin/xpowerchute
 %{_prefix}/X11R6/lib/X11/app-defaults/*
 %{_prefix}/X11R6/lib/X11/uid/*
-%config(noreplace) %verify(not size mtime md5) %{_libdir}/powerchute/upsd.pid
-%config(noreplace) %verify(not size mtime md5) %{_libdir}/powerchute/bkupsd.pid
+%config(noreplace) %verify(not md5 mtime size) %{_libdir}/powerchute/upsd.pid
+%config(noreplace) %verify(not md5 mtime size) %{_libdir}/powerchute/bkupsd.pid
