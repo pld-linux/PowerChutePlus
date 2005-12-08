@@ -1,12 +1,12 @@
 #!/bin/sh
-# 
+#
 # Copyright 1999 American Power Conversion, All Rights Reserved
 #
 # Revision History:
-#  msamson  01Apr99 For Linux, we have to remove upsoff.cmd, because we cannot 
+#  msamson  01Apr99 For Linux, we have to remove upsoff.cmd, because we cannot
 #                   remove this file once all filesystems have been unmounted
-#                   in our shutdown script. 
-#  msamson  04Oct99 Incorporated standard init fixes from Redhat 
+#                   in our shutdown script.
+#  msamson  04Oct99 Incorporated standard init fixes from Redhat
 #                   (pjones@redhat.com)
 #
 # chkconfig:	2345 98 92
@@ -54,7 +54,7 @@ case "$1" in
 		rm -f /var/lock/subsys/upsd >/dev/null 2>&1
 	else
 		msg_not_running UPSd
-	fi	
+	fi
 	;;
   status)
 	status upsd
