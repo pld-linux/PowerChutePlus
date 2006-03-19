@@ -17,15 +17,15 @@ Source6:	%{name}-powerchute.ini_templ
 Source7:	ftp://ftp.apcc.com/apc/public/software/unix/linux/pcplus/settings.pdf
 # Source7-md5:	c69abad141a836fd12ced0cc39049dc6
 Patch0:		%{name}-fix-sh.patch
-BuildRequires:	rpmbuild(macros) >= 1.202
-PreReq:		rc-scripts
-Requires(pre):	/bin/id
-Requires(pre):	/usr/bin/getgid
-Requires(pre):	/usr/sbin/useradd
-Requires(pre):	/usr/sbin/groupadd
+BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
+Requires(pre):	/bin/id
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
+Requires:	rc-scripts
 Provides:	group(pwrchute)
 Provides:	user(pwrchute)
 ExclusiveArch:	%{ix86}
@@ -36,7 +36,7 @@ This program allows users to safely shut down their system in response
 to power failures and other power events. It also allows users to
 configure and manage UPS models.
 
-Please note that /usr/lib/powerchute/Config.sh should be run in order
+Please note that %{_libdir}/powerchute/Config.sh should be run in order
 to configure PowerChute plus.
 
 %description -l pl
@@ -48,13 +48,10 @@ Uwaga: aby skonfigurowaæ PowerChute Plus nale¿y uruchomiæ
 
 %prep
 %setup -q -c
-for i in BI_LINUX CI_LINUX COMMON FI_LINUX HELP ; do
+for i in BI_LINUX CI_LINUX COMMON FI_LINUX HELP; do
 	tar xf $i
 done
 %patch0 -p1
-
-%build
-# No build, binary package
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -108,11 +105,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add upsd
-if [ -f /var/lock/subsys/upsd ]; then
-	/etc/rc.d/init.d/upsd restart 1>&2
-else
-	echo "Type \"/etc/rc.d/init.d/upsd start\" to start UPSd server" 1>&2
-fi
+%service upsd restart "UPSd server"
 cd %{_libdir}/powerchute
 ./machine_id
 echo "You should run %{_libdir}/powerchute/Config.sh to configure PowerChute plus"
@@ -120,9 +113,7 @@ echo "Remember to set the password for pwrchute account"
 
 %preun
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/upsd ]; then
-		/etc/rc.d/init.d/upsd stop 1>&2
-	fi
+	%service upsd stop
 	/sbin/chkconfig --del upsd
 fi
 
