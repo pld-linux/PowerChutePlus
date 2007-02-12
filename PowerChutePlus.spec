@@ -1,5 +1,5 @@
 Summary:	UPS management software for APC UPS models
-Summary(pl):	Oprogramowanie do obs³ugi UPS-ów APC
+Summary(pl.UTF-8):   Oprogramowanie do obsÅ‚ugi UPS-Ã³w APC
 Name:		PowerChutePlus
 Version:	4.5.3
 Release:	1
@@ -39,11 +39,11 @@ configure and manage UPS models.
 Please note that %{_libdir}/powerchute/Config.sh should be run in order
 to configure PowerChute plus.
 
-%description -l pl
-Ten program pozwala u¿ytkownikom bezpiecznie wy³±czyæ system w
-przypadku awarii zasilania. Pozwala tak¿e na skonfigurowanie UPS.
+%description -l pl.UTF-8
+Ten program pozwala uÅ¼ytkownikom bezpiecznie wyÅ‚Ä…czyÄ‡ system w
+przypadku awarii zasilania. Pozwala takÅ¼e na skonfigurowanie UPS.
 
-Uwaga: aby skonfigurowaæ PowerChute Plus nale¿y uruchomiæ
+Uwaga: aby skonfigurowaÄ‡ PowerChute Plus naleÅ¼y uruchomiÄ‡
 /usr/lib/powerchute/Config.sh .
 
 %prep
