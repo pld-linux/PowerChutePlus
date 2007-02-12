@@ -1,5 +1,5 @@
 Summary:	UPS management software for APC UPS models
-Summary(pl.UTF-8):   Oprogramowanie do obsługi UPS-ów APC
+Summary(pl.UTF-8):	Oprogramowanie do obsługi UPS-ów APC
 Name:		PowerChutePlus
 Version:	4.5.3
 Release:	1
