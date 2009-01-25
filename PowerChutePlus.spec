@@ -2,7 +2,7 @@ Summary:	UPS management software for APC UPS models
 Summary(pl.UTF-8):	Oprogramowanie do obsługi UPS-ów APC
 Name:		PowerChutePlus
 Version:	4.5.3
-Release:	1
+Release:	2
 License:	(c) 1999 APC, inc.
 Group:		Applications/System
 Source0:	ftp://ftp.apcc.com/apc/public/software/unix/linux/pcplus/453/pcplus_453_caldera.tar
@@ -100,8 +100,8 @@ ln -sf /var/run/bkupsd.pid $RPM_BUILD_ROOT%{_libdir}/powerchute
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-%groupadd -g 68 pwrchute
-%useradd -u 68 -g 68 -d /usr/share/empty -s /bin/false -c "PowerChute Plus" pwrchute
+%groupadd -g 233 pwrchute
+%useradd -u 233 -g 233 -d /usr/share/empty -s /bin/false -c "PowerChute Plus" pwrchute
 
 %post
 /sbin/chkconfig --add upsd
