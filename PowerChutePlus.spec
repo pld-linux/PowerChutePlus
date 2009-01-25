@@ -24,7 +24,9 @@ Requires(postun):	/usr/sbin/userdel
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/groupmod
 Requires(pre):	/usr/sbin/useradd
+Requires(pre):	/usr/sbin/usermod
 Requires:	rc-scripts
 Provides:	group(pwrchute)
 Provides:	user(pwrchute)
@@ -100,6 +102,12 @@ ln -sf /var/run/bkupsd.pid $RPM_BUILD_ROOT%{_libdir}/powerchute
 rm -rf $RPM_BUILD_ROOT
 
 %pre
+# move to trigger?
+if [ -n "`/usr/bin/getgid pwrchute`" ] && [ "`/usr/bin/getgid pwrchute`" = 233 ]; then
+	/usr/sbin/groupmod -g 233 pwrchute
+	chgrp pwrchute %{_sysconfdir}/powerchute.ini
+	/usr/sbin/usermod -u 233 -g 233 pwrchute
+fi
 %groupadd -g 233 pwrchute
 %useradd -u 233 -g 233 -d /usr/share/empty -s /bin/false -c "PowerChute Plus" pwrchute
 
