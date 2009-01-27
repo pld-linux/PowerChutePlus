@@ -103,7 +103,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %pre
 # move to trigger?
-if [ -n "`/usr/bin/getgid pwrchute`" ] && [ "`/usr/bin/getgid pwrchute`" = 233 ]; then
+if [ -n "`/usr/bin/getgid pwrchute 2>/dev/null`" ] && [ "`/usr/bin/getgid pwrchute`" != 233 ]; then
 	/usr/sbin/groupmod -g 233 pwrchute
 	chgrp pwrchute %{_sysconfdir}/powerchute.ini
 	/usr/sbin/usermod -u 233 -g 233 pwrchute
