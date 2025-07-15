@@ -53,7 +53,7 @@ Uwaga: aby skonfigurować PowerChute Plus należy uruchomić
 for i in BI_LINUX CI_LINUX COMMON FI_LINUX HELP; do
 	tar xf $i
 done
-%patch0 -p1
+%patch -P0 -p1
 
 %install
 rm -rf $RPM_BUILD_ROOT
